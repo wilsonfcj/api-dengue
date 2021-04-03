@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ifsc.sti.tcc.repository.ImagemRepository;
 import ifsc.sti.tcc.repository.UsuarioRepository;
 import ifsc.sti.tcc.resources.rest.ResponseBase;
 import ifsc.sti.tcc.resources.rest.models.usuario.cadastro.UsuarioRequest;
@@ -32,10 +33,14 @@ public class UsuarioApi {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	@Autowired
+	private ImagemRepository imagemRepository;
+	
 	@ApiOperation(value = "Busca a lista de usuários cadastrados")
 	@GetMapping("/BuscarTodos")
 	public ResponseEntity<ResponseBase<List<UsuarioBaseResponse>>> getAlunosUsers() {
 		UsuarioService lUsuarioService = new UsuarioService.Instance(usuarioRepository)
+				.withImagemRepository(imagemRepository)
 				.build();
 		return lUsuarioService.buscar();
 	}
@@ -44,6 +49,7 @@ public class UsuarioApi {
 	@GetMapping("/BuscarUsuarioId")
 	public ResponseEntity<ResponseBase<UsuarioBaseResponse>> buscarUsuarioPorId(@RequestParam Integer id) {
 		UsuarioService lUsuarioService = new UsuarioService.Instance(usuarioRepository)
+				.withImagemRepository(imagemRepository)
 				.build();
 		return lUsuarioService.buscar(id);
 	}
@@ -52,6 +58,7 @@ public class UsuarioApi {
 	@GetMapping("/BuscarUsuarioCPF")
 	public ResponseEntity<ResponseBase<UsuarioBaseResponse>> buscarUsuarioPorCPF(@RequestParam  String cpf) {
 		UsuarioService lUsuarioService = new UsuarioService.Instance(usuarioRepository)
+				.withImagemRepository(imagemRepository)
 				.build();
 		return lUsuarioService.buscar(cpf);
 	}
@@ -60,6 +67,7 @@ public class UsuarioApi {
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	public ResponseEntity<ResponseBase<UsuarioBaseResponse>> login(@RequestBody @Valid LoginRequest loginRequest) {
 		UsuarioService lUsuarioService = new UsuarioService.Instance(usuarioRepository)
+				.withImagemRepository(imagemRepository)
 				.build();
 		return lUsuarioService.autenticar(loginRequest);
 	}
@@ -68,6 +76,7 @@ public class UsuarioApi {
 	@RequestMapping(value = "/Cadastro", method = RequestMethod.POST)
 	public ResponseEntity<ResponseBase<UsuarioBaseResponse>> cadastrar(@RequestBody @Valid UsuarioRequest usuarioRequest) {
 		UsuarioService lUsuarioService = new UsuarioService.Instance(usuarioRepository)
+				.withImagemRepository(imagemRepository)
 				.build();
 		return lUsuarioService.cadastrar(usuarioRequest);
 	}
@@ -76,6 +85,7 @@ public class UsuarioApi {
 	@RequestMapping(value = "/Alterar", method = RequestMethod.PUT)
 	public ResponseEntity<ResponseBase<UsuarioBaseResponse>> alterar(@RequestBody @Valid UsuarioRequest usuarioRequest) {
 		UsuarioService lUsuarioService = new UsuarioService.Instance(usuarioRepository)
+				.withImagemRepository(imagemRepository)
 				.build();
 		return lUsuarioService.alterar(usuarioRequest);
 	}

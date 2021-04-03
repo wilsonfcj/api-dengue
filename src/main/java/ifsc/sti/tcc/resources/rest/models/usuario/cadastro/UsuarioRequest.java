@@ -26,6 +26,9 @@ public class UsuarioRequest {
 	
 	@JsonProperty(value = "Senha")
 	private String senha;
+	
+	@JsonProperty(value = "ImagemUsuario")
+	private String imagemPerfil;
 
 	public String getCpf() {
 		return cpf.replace(".", "").replace("-", "");
@@ -89,6 +92,14 @@ public class UsuarioRequest {
 
 	public int foneValido() {
 		return ValidateUtil.validateCelular(fone);
+	}
+	
+	public String getImagemPerfil() {
+		return imagemPerfil;
+	}
+
+	public void setImagemPerfil(String imagemPerfil) {
+		this.imagemPerfil = imagemPerfil;
 	}
 
 	public ValidatedField validarCampos() {

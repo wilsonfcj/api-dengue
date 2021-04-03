@@ -24,6 +24,9 @@ public class UsuarioBaseResponse {
 	@JsonProperty(value="Telefone")
 	private String fone;
 	
+	@JsonProperty(value="ImagemUsuario")
+	private String imagemPerfil;
+	
 	public Long getId() {
 		return id;
 	}
@@ -70,5 +73,13 @@ public class UsuarioBaseResponse {
 	
 	public void setFone(String fone) {
 		this.fone = fone;
+	}
+
+	public String getImagemPerfil() {
+		return imagemPerfil;
+	}
+
+	public void setImagemPerfil(String imagemPerfil) {
+		this.imagemPerfil = imagemPerfil;
 	}
 }

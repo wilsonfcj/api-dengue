@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import ifsc.sti.tcc.modelos.usuario.Imagem;
 import ifsc.sti.tcc.modelos.usuario.Usuario;
+import ifsc.sti.tcc.repository.ImagemRepository;
 import ifsc.sti.tcc.repository.UsuarioRepository;
 import ifsc.sti.tcc.resources.mappers.domaintoview.UsuarioMapper;
 import ifsc.sti.tcc.resources.mappers.viewtodomain.AlterarMapper;
@@ -25,17 +27,26 @@ public class UsuarioService {
 	private static Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
 	private UsuarioRepository jpaRepository;
+	private ImagemService imagemService;
 
 	public static class Instance extends BaseService<UsuarioRepository> implements BaseService.BaseObject<UsuarioService> {
 
 		public Instance(UsuarioRepository jpaRepository) {
 			super(jpaRepository);
 		}
-
+		
+		private ImagemRepository imagemRepository;
+		
+		public Instance withImagemRepository(ImagemRepository repository) {
+			this.imagemRepository = repository;
+			return this;
+		}
+		
 		@Override
 		public UsuarioService build() {
 			UsuarioService service = new UsuarioService();
 			service.setJpaRepository(jpaRepository);
+			service.setImagemService(new ImagemService.Instance(imagemRepository).build());
 			return service;
 		}
 	}
@@ -52,7 +63,11 @@ public class UsuarioService {
 	}
 
 	private UsuarioBaseResponse converterUsuario(Usuario usuario) {
+		Imagem imagem = imagemService.buscarImagem(usuario.getId());
 		UsuarioBaseResponse usuarioBaseResponse = new UsuarioMapper().transform(usuario);
+		if (imagem != null) {
+			usuarioBaseResponse.setImagemPerfil(imagem.getPerfil());
+		}
 		return usuarioBaseResponse;
 	}
 
@@ -115,6 +130,10 @@ public class UsuarioService {
 			if (jpaRepository.findByCpf(usuarioRequest.getCpf()) == null) {
 				Usuario usuario = salvarUsuario(usuarioRequest);
 				
+				if (usuarioRequest.getImagemPerfil() != null) {
+					imagemService.saveImage(usuario.getId(), usuarioRequest.getImagemPerfil());
+				}
+				
 				if (usuario != null) {
 					baseResponse = new ResponseBase<UsuarioBaseResponse>(true, "Usuario cadastrado com sucesso",
 							converterUsuario(usuario));
@@ -143,6 +162,9 @@ public class UsuarioService {
 					usuarioRequest.setSenha(usuario.getSenha());
 				}
 				Usuario usuarioAlterado = alterarUsuario(usuario, usuarioRequest);
+				
+				imagemService.alterarImagem(usuario.getId(), usuarioRequest.getImagemPerfil());
+				
 				if (usuarioAlterado != null) {
 					baseResponse = new ResponseBase<UsuarioBaseResponse>(true, "Usuario Alterado com sucesso",
 							converterUsuario(usuarioAlterado));
@@ -166,5 +188,13 @@ public class UsuarioService {
 
 	public void setJpaRepository(UsuarioRepository jpaRepository) {
 		this.jpaRepository = jpaRepository;
+	}
+	
+	public ImagemService getImagemService() {
+		return imagemService;
+	}
+
+	public void setImagemService(ImagemService imagemService) {
+		this.imagemService = imagemService;
 	}
 }
