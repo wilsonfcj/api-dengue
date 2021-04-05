@@ -27,6 +27,7 @@ public class Foco {
 	private Double latitude;
 	private Double longitude;
 	
+	@Column(columnDefinition="TEXT")
 	private String imagem;
 	private Date dataCadastro;
 	
