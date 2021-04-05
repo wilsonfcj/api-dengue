@@ -6,16 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import ifsc.sti.tcc.modelos.usuario.Foco;
-import ifsc.sti.tcc.modelos.usuario.Imagem;
 import ifsc.sti.tcc.modelos.usuario.Usuario;
 import ifsc.sti.tcc.repository.FocoRepository;
 import ifsc.sti.tcc.repository.ImagemRepository;
 import ifsc.sti.tcc.repository.UsuarioRepository;
-import ifsc.sti.tcc.resources.mappers.domaintoview.UsuarioMapper;
-import ifsc.sti.tcc.resources.mappers.viewtodomain.CadastroMapper;
 import ifsc.sti.tcc.resources.mappers.viewtodomain.FocoMapper;
 import ifsc.sti.tcc.resources.rest.ResponseBase;
-import ifsc.sti.tcc.resources.rest.models.usuario.cadastro.UsuarioRequest;
 import ifsc.sti.tcc.resources.rest.models.usuario.foco.FocoRequest;
 import ifsc.sti.tcc.resources.rest.models.usuario.foco.FocoResponse;
 
