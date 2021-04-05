@@ -61,6 +61,10 @@ public class UsuarioService {
 		usuario.setNome(usuarioRequest.getNome());
 		return jpaRepository.save(new AlterarMapper().transform(usuario, usuarioRequest));
 	}
+	
+	public Usuario loadUser(long idUser) {
+		return jpaRepository.findById(idUser);
+	}
 
 	private UsuarioBaseResponse converterUsuario(Usuario usuario) {
 		Imagem imagem = imagemService.buscarImagem(usuario.getId());
